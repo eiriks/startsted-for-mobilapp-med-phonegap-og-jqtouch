@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no;" />
+
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+
+	<!-- iPad/iPhone specific css below, add after your main css >	
+	<link rel="stylesheet" media="only screen and (max-device-width: 1024px)" href="ipad.css" type="text/css" />		
+	<link rel="stylesheet" media="only screen and (max-device-width: 480px)" href="iphone.css" type="text/css" />		
+	-->
+	<!-- If you application is targeting iOS BEFORE 4.0 you MUST put json2.js from http://www.JSON.org/json2.js into your www directory and include it here -->
+	<script type="text/javascript" charset="utf-8" src="js/phonegap.0.9.6.min.js"></script>
+	<script type="text/javascript" charset="utf-8" src="js/jqtouch/jquery-1.4.2.min.js"></script>
+	<!-- jqtouch -->
+	<script src="js/jqtouch/jqtouch.js" type="application/x-javascript" charset="utf-8"></script>
+	<style type="text/css" media="screen">@import "js/jqtouch/jqtouch.css";</style>
+	<style type="text/css" media="screen">@import "js/jqtouch/themes/jqt/theme.css";</style>
+    <script type="text/javascript" charset="utf-8">
+
+
+	// If you want to prevent dragging, uncomment this section
+	/*
+	function preventBehavior(e) 
+	{ 
+      e.preventDefault(); 
+    };
+	document.addEventListener("touchmove", preventBehavior, false);
+	*/
+	
+	/* If you are supporting your own protocol, the var invokeString will contain any arguments to the app launch.
+	see http://iphonedevelopertips.com/cocoa/launching-your-own-application-via-a-custom-url-scheme.html
+	for more details -jm */
+	/*
+	function handleOpenURL(url)
+	{
+		// TODO: do something with the url passed in.
+	}
+	*/
+	
+	// Beep three times
+    //
+    function playBeep() {
+        navigator.notification.beep(3);
+		console.log("funkjsionen playBeep kjørte");
+    }
+
+    // Vibrate for 2 seconds
+    //
+    function vibrate() {
+        navigator.notification.vibrate(); // tidligere (2000)
+		console.log("funkjsionen vibrate kjørte");
+    }
+	
+	// location
+	//
+	function getMyLocation() {
+		navigator.geolocation.getCurrentPosition(LOConSuccess, LOConError);
+	}
+	function LOConSuccess(position) {
+	var element = document.getElementById('stadfestet');
+        element.innerHTML = 'Latitude: '           + position.coords.latitude              + '<br />' +
+                            'Longitude: '          + position.coords.longitude             + '<br />' +
+                            'Altitude: '           + position.coords.altitude              + '<br />' +
+                            'Accuracy: '           + position.coords.accuracy              + '<br />' +
+                            'Altitude Accuracy: '  + position.coords.altitudeAccuracy      + '<br />' +
+                            'Heading: '            + position.coords.heading               + '<br />' +
+                            'Speed: '              + position.coords.speed                 + '<br />' +
+                            'Timestamp: '          + new Date(position.timestamp)          + '<br />';
+		console.log("funkjsionen LOConSuccess kjørte");
+    }
+	function LOConError(error) {
+        alert('code: '    + error.code    + '\n' +
+              'message: ' + error.message + '\n');
+    }
+	function getDeviceProperties() {
+		console.log("funkjsonen getDeviceProperties() startet");	
+		var DEVICEelement = document.getElementById('deviceProperties');
+		DEVICEelement.innerHTML =	'Device Name: '     + device.name     + '<br />' + 
+					'Device PhoneGap: ' + device.phonegap + '<br />' + 
+					'Device Platform: ' + device.platform + '<br />' + 
+					'Device UUID: '     + device.uuid     + '<br />' + 
+					'Device Version: '  + device.version  + '<br />';
+		console.log("funkjsonen getDeviceProperties() kjørte");	
+	}
+	
+
+	
+	function onBodyLoad()
+	{		
+		document.addEventListener("deviceready",onDeviceReady,false);
+	}
+	
+	/* When this function is called, PhoneGap has been initialized and is ready to roll */
+	/* If you are supporting your own protocol, the var invokeString will contain any arguments to the app launch.
+	see http://iphonedevelopertips.com/cocoa/launching-your-own-application-via-a-custom-url-scheme.html
+	for more details -jm */
+	function onDeviceReady()
+	{
+		// do your thing!
+		//navigator.notification.alert("PhoneGap is working")
+		console.log("vi er i gang");
+	}
+	
+	</script>
+	<script type="text/javascript" charset="utf-8">
+	var jQT = new $.jQTouch({
+    icon: 'false', // tror denne takles av phonegap. var 'jqtoch.png'.
+    statusBar: 'black-translucent', // finnes den det hele tatt denne???
+    // ser ikke for meg at dette funker. stiere er ikke riktige. men god idé å preloade bilder?
+	preloadImages: [ 
+        'js/jqtouch/themes/jqt/img/chevron_white.png',
+        'js/jqtouchthemes/jqt/img/bg_row_select.gif',
+        'js/jqtouchthemes/jqt/img/back_button_clicked.png',
+        'js/jqtouchthemes/jqt/img/button_clicked.png'
+        ]
+	});
+    
+    </script>
+  </head>
+
+  <body onload="onBodyLoad()">
+  <div id="jqt">
+
+<!-- start home - denne vises auto når jqt loades aka dette er en index -->
+	<div id="home" class="current"><!-- aner ikke om class current er nødvendig -->
+		<div class="toolbar">
+			<h1>App name</h1>
+            <a class="button flipleft" id="infoButton" href="#about">Om</a>
+		</div>
+        <ul class="rounded">
+			<li class="arrow"><a href="#eirik">Eirik</a> <small class="counter">8</small></li>
+			<li class="arrow"><a href="#device" onclick="getDeviceProperties();">device ting</a></li>
+			<li class="arrow"><a href="#location">location</a></li>
+			<li class="arrow"><a href="#about" class="flip">about</a> <small class="counter">4</small></li>
+		</ul>
+		<ul class="individual"><!-- ser ut til å funke best med kun to elementer i listen -->
+			<li>Kaffe</li>
+			<li>Te</li>
+		</ul>
+		<div class="info">
+			<p>Du verden, hei verden!</p>
+			<p>Jeg skulle gjerne ha hatt en fin tab-sak i bunnen slik mange apps har</p>
+		</div>
+	</div> <!-- end home -->
+
+	
+<!-- views går under her -->
+
+	<div id="location">
+		<div class="toolbar">
+			<h1>Hvor er jeg?</h1>
+			<a href="#" class="back">Tilbake</a>
+		</div>
+		<div class="info">
+			<p>Dette er en info-side</p>
+			<a href="#" class="btn large" onclick="getMyLocation();">Lokaliser meg!</a> 
+		</div>
+		<div id="stadfestet"></div>
+	</div> <!-- end location -->
+
+	<div id="device">
+		<div class="toolbar">
+			<h1>Enhetsns egenskaper</h1>
+			<a href="#" class="back">Tilbake</a>
+		</div>
+		<p id="deviceProperties">Laster enhetens egenskaper...</p>
+		<p><a href="#" class="grayButton goback">tilbake</a></p>
+	</div> <!-- en device -->
+				
+	<div id="about" class="selectable">
+		<div class="toolbar">
+			<h1>App name</h1>
+			<a class="button goback" id="infoButton" href="#">X</a>
+		</div>
+		<ul class="rounded">
+		<li><p><strong>appname</strong><br />versjon 0.1</li>
+        <li>av <a href="http://www.stavelin.com"> Eirik Stavelin</a></li>
+        <li>Et tomt skall for å lage mobile apps med phonegap og jqtouch</li>
+		</ul>
+		<h2>Kilder på twitter</h2>
+		<ul class="individual"><!-- ser ut til å funke best med kun to elementer i listen -->
+			<li><a target="_blank" href="http://twitter.com/jqtouch">@jQTouch</a></li>
+			<li><a target"_blank" href="http://twitter.com/#!/phonegap">@phonegap</a></li>
+		</ul>
+ 
+        <a href="#" class="grayButton goback">Close</a>
+	</div><!-- end about -->
+
+	<div id="eirik">
+		<div class="toolbar">
+			<h1>Eiriks view</h1>
+            <a href="#" class="back">Tilbake</a>
+		</div>
+		<div class="info">
+			<p>Dette er en info-side</p>
+			<a href="#" class="btn large" onclick="playBeep();">Beep</a>  
+			<a href="#" class="btn large" onclick="vibrate();">Vibrate</a>  
+		</div>
+		<ul class="rounded">
+			<li>En "app" er et html-document</li>
+			<li>Ulike views er ulike DIVer med unik id</li>
+			<li class="forward">Alt er laget av lister</li>
+			<li>Ser det ui alle fall ut til</li>
+			<li><a href="#">GUI-elementer er ment å væe lenker</a></li>
+		</ul>
+		<ul>
+			<li>Lister og enkelte div'er</li>
+			<li>"Magien" ligger i klassenavn for utseende og enkele visuelle funksjoner (som flip)</li>
+			<li>mens navigasjon fikses med IDer</li>
+		</ul>
+		<div class="info">
+		<p>Dette er en DIV med class "info", slik ser den ut</p>
+		</div>
+	</div><!-- end eirik -->
+
+
+
+	</div> <!-- end jqt -->
+  </body>
+</html>
